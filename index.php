@@ -19,6 +19,8 @@ $rootPath = $configArray[$v]['root_path'];
 $dateArray = array();
 $date = time();
 
+$dateErrorArray = array();
+
 for($i = 0; $i < 30; $i++)
 {
     $time = strtotime("- " . $i ." days");
@@ -30,6 +32,12 @@ for($i = 0; $i < 30; $i++)
     if (is_file($filename))
     {
         $dateArray[] = array('path'=>urlencode($filename), 'content'=> sprintf("%d年%d月%d日", $year, $month, $day));
+    }
+    
+    $filename = sprintf("%s/%d/%d/%d/djsg_%s.error_log", $rootPath, $serverno, $year, $month, $day);
+    if (is_file($filename))
+    {
+    	$dateErrorArray[] = array('path'=>urlencode($filename), 'content'=> sprintf("%d年%d月%d日", $year, $month, $day));
     }
 }
 
@@ -44,7 +52,13 @@ for($i = 0; $i < 30; $i++)
 <p align="center">日志列表(列出最近20天以内)--<?php echo $v; ?></p>
 <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间:&nbsp;&nbsp;<?php echo date("Y-m-d H:i:s");?></p>
 <p><br/><br/><br/></p>
+<p align="center">崩溃日志:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 <?php foreach ($dateArray as $data) { ?>
+<p align="center"><a href="showlog.php?v=<?php echo $v; ?>&path=<?php echo $data['path']; ?>"><?php echo $data['content']; ?></a></p>
+<?php } ?>
+<p><br/><br/></p>
+<p align="center">一般lua错误日志:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<?php foreach ($dateErrorArray as $data) { ?>
 <p align="center"><a href="showlog.php?v=<?php echo $v; ?>&path=<?php echo $data['path']; ?>"><?php echo $data['content']; ?></a></p>
 <?php } ?>
 <p align="center"><br/><br/><br/></p>
