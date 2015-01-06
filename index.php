@@ -41,6 +41,8 @@ for($i = 0; $i < 30; $i++)
     }
 }
 
+$maxLen = (sizeof($dateArray) > sizeof($dateErrorArray) ? sizeof($dateArray) : sizeof($dateErrorArray));
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -52,15 +54,18 @@ for($i = 0; $i < 30; $i++)
 <p align="center">日志列表(列出最近20天以内)--<?php echo $v; ?></p>
 <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间:&nbsp;&nbsp;<?php echo date("Y-m-d H:i:s");?></p>
 <p><br/><br/><br/></p>
-<p align="center">崩溃日志:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<?php foreach ($dateArray as $data) { ?>
-<p align="center"><a href="showlog.php?v=<?php echo $v; ?>&path=<?php echo $data['path']; ?>"><?php echo $data['content']; ?></a></p>
-<?php } ?>
-<p><br/><br/></p>
-<p align="center">一般lua错误日志:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<?php foreach ($dateErrorArray as $data) { ?>
-<p align="center"><a href="showlog.php?v=<?php echo $v; ?>&path=<?php echo $data['path']; ?>"><?php echo $data['content']; ?></a></p>
-<?php } ?>
+<table width="80%" border="1" align="center">
+  <tr>
+    <td align="center" bgcolor="#CC9999">崩溃日志</td>
+    <td align="center" bgcolor="#FFCC66">一般lua错误日志</td>
+  </tr>
+<?php for ($i = 0; $i < $maxLen; $i++) {  ?>
+  <tr>
+    <td align="center" ><?php if (isset($dateArray[$i])) { echo "<a href=\"showlog.php?v={$v}&path={$dateArray[$i]['path']}\">{$dateArray[$i]['content']}</a>";} else { echo "&nbsp;";} ?></td>
+    <td align="center" ><?php if (isset($dateErrorArray[$i])) { echo "<a href=\"showlog.php?v={$v}&path={$dateErrorArray[$i]['path']}\">{$dateErrorArray[$i]['content']}</a>";} else { echo "&nbsp;";} ?></td>
+  </tr>
+  <?php } ?>
+</table>
 <p align="center"><br/><br/><br/></p>
 </body>
 </html>
