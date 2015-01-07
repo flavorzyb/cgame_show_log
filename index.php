@@ -21,6 +21,8 @@ $date = time();
 
 $dateErrorArray = array();
 
+$dataFightArray = array();
+
 for($i = 0; $i < 30; $i++)
 {
     $time = strtotime("- " . $i ." days");
@@ -38,6 +40,12 @@ for($i = 0; $i < 30; $i++)
     if (is_file($filename))
     {
     	$dateErrorArray[] = array('path'=>urlencode($filename), 'content'=> sprintf("%d年%d月%d日", $year, $month, $day));
+    }
+    
+    $filename = sprintf("%s/%d/%d/%d/djsg_%s.data_log", $rootPath, $serverno, $year, $month, $day);
+    if (is_file($filename))
+    {
+    	$dataFightArray[] = array('path'=>urlencode($filename), 'content'=> sprintf("%d年%d月%d日", $year, $month, $day));
     }
 }
 
@@ -58,11 +66,13 @@ $maxLen = (sizeof($dateArray) > sizeof($dateErrorArray) ? sizeof($dateArray) : s
   <tr>
     <td align="center" bgcolor="#CC9999">崩溃日志</td>
     <td align="center" bgcolor="#FFCC66">一般lua错误日志</td>
+    <td align="center" bgcolor="#FF0066">战斗数据验证失败日志</td>
   </tr>
 <?php for ($i = 0; $i < $maxLen; $i++) {  ?>
   <tr>
     <td align="center" ><?php if (isset($dateArray[$i])) { echo "<a href=\"showlog.php?v={$v}&path={$dateArray[$i]['path']}\">{$dateArray[$i]['content']}</a>";} else { echo "&nbsp;";} ?></td>
     <td align="center" ><?php if (isset($dateErrorArray[$i])) { echo "<a href=\"showlog.php?v={$v}&path={$dateErrorArray[$i]['path']}\">{$dateErrorArray[$i]['content']}</a>";} else { echo "&nbsp;";} ?></td>
+    <td align="center" ><?php if (isset($dataFightArray[$i])) { echo "<a href=\"showlog.php?v={$v}&path={$dataFightArray[$i]['path']}\">{$dataFightArray[$i]['content']}</a>";} else { echo "&nbsp;";} ?></td>
   </tr>
   <?php } ?>
 </table>
